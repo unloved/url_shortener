@@ -36,3 +36,9 @@ body {
 .form-shortener ul{
     align-items: left;
 }
+
+.form-shortener .copy-button{
+    margin-left: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
