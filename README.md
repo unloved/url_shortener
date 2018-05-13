@@ -6,3 +6,4 @@
 4. Installing grape, creating first version of api for react component
 5. Adding database support, storing urls in database
 6. Storing redirects in the database
+7. Covering backend with tests

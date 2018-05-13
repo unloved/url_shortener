@@ -26,7 +26,7 @@ class API < Grape::API
         if url.save
           {url: url.key}
         else
-          error!({error: url.errors[:original_url].join(', ')})
+          error!({error: url.errors[:original_url].join(', ')}, 400)
         end
       end
 
