@@ -15,7 +15,7 @@ body {
 
 .form-shortener {
     width: 100%;
-    max-width: 330px;
+    max-width: 430px;
     padding: 15px;
     margin: auto;
 }
@@ -32,8 +32,7 @@ body {
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
 }
-.form-shortener input[type="text"] {
-    margin-bottom: 10px;
-    /*border-bottom-right-radius: 0;*/
-    /*border-bottom-left-radius: 0;*/
+
+.form-shortener ul{
+    align-items: left;
 }
