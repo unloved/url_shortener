@@ -5,3 +5,4 @@
 3. Adding reactjs support, moving form to react component
 4. Installing grape, creating first version of api for react component
 5. Adding database support, storing urls in database
+6. Storing redirects in the database
