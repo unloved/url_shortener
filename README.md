@@ -7,3 +7,7 @@
 5. Adding database support, storing urls in database
 6. Storing redirects in the database
 7. Covering backend with tests
+
+Possible improvements:
+  * use a build system for frontend like webpack
+  * grab more information from user as browser, os, location (use js maybe)
