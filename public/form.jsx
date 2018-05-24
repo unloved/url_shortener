@@ -1,9 +1,10 @@
 class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {url: '', items: []};
+    this.state = {original_url: '', strategy:'SecureRandom', items: []};
     this.onSubmit = this.onSubmit.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
+    this.onUrlChange = this.onUrlChange.bind(this);
+    this.onStrategyChange = this.onStrategyChange.bind(this);
     this.disabled = this.disabled.bind(this);
   }
 
@@ -12,27 +13,33 @@ class Form extends React.Component {
     $.ajax({
       type: 'POST',
       url: '/api/urls',
-      data: {url: this.state.url},
+      data: {model: {original_url: this.state.original_url, strategy: this.state.strategy}},
       success: function(response){
-        this.setState({url: '', items: [response.url, ...this.state.items]})
+        this.setState({original_url: '', items: [response, ...this.state.items]})
       }.bind(this),
       error: function(data){
+        console.log(data.responseJSON['error']);
         alert(data.responseJSON['error'])
       }.bind(this)
     });
   }
 
-  onInputChange(event){
-    this.setState({url: event.target.value});
+  onUrlChange(event){
+    this.setState({original_url: event.target.value});
+  }
+
+  onStrategyChange(event){
+    this.setState({strategy: event.target.value});
   }
 
   renderItems(){
     let items = this.state.items.map((item) => {
-      let url = window.location.href + item;
+      let url = window.location.href + item['url'];
+      let strategy = item['strategy'];
       return (
       <li className="list-group-item">
         <a href={url} target="_blank">
-          {url}
+          {url} ({strategy})
         </a>
         <CopyToClipboard text={url}>
           <button type="button" className="btn btn-secondary btn-sm copy-button">Copy</button>
@@ -55,7 +62,7 @@ class Form extends React.Component {
   }
 
   disabled(){
-    return !this.isUrl(this.state.url)
+    return !this.isUrl(this.state.original_url)
   }
 
   render() {
@@ -65,12 +72,17 @@ class Form extends React.Component {
         <div className="input-group mb-3">
           <input type="text" className="form-control"
                  placeholder="Your original url"
-                 onChange={this.onInputChange}
-                 value={this.state.url}
+                 onChange={this.onUrlChange}
+                 value={this.state.original_url}
           />
-            <div className="input-group-append">
-              <button className="btn btn-outline-primary" type="submit" disabled={this.disabled()} >SHORTEN</button>
-            </div>
+          <select onChange={this.onStrategyChange}>
+            <option selected value="SecureRandom">SecureRandom</option>
+            <option value="MD5">MD5</option>
+            <option value="">any</option>
+          </select>
+          <div className="input-group-append">
+            <button className="btn btn-outline-primary" type="submit" disabled={this.disabled()}>SHORTEN</button>
+          </div>
         </div>
         {this.renderItems()}
       </form>

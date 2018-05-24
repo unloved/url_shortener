@@ -10,6 +10,7 @@ describe API do
 
   let(:url) {create(:url)}
   let(:visit_data) {create_list(:url_visit, 2, {url: url})}
+  let(:url_params) { attributes_for(:url) }
 
   context 'GET /:key' do
     it 'redirects to original url' do
@@ -32,16 +33,24 @@ describe API do
   context 'POST /api/urls' do
     it 'creates url record' do
       expect(Url.count).to eq(0)
-      url = FactoryBot.build(:url).original_url
-      post "/api/urls", {url: url}
+      post "/api/urls", {model: url_params}
       expect(last_response.status).to eq(201)
       expect(Url.count).to eq(1)
-      expect(Url.last.original_url).to eq(url)
+      expect(Url.last.original_url).to eq(url_params[:original_url])
+    end
+
+    it 'creates url record with specific strategy' do
+      expect(Url.count).to eq(0)
+      strategy = Url::STRATEGIES.sample
+      post "/api/urls", {model: url_params.merge(strategy: strategy)}
+      expect(last_response.status).to eq(201)
+      expect(Url.count).to eq(1)
+      expect(Url.last.strategy).to eq(strategy)
     end
 
     it 'returns an error with invalid params' do
       expect(Url.count).to eq(0)
-      post "/api/urls", {url: nil}
+      post "/api/urls", {model: {original_url: nil}}
       expect(last_response.status).to eq(400)
       expect(Url.count).to eq(0)
     end

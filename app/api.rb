@@ -22,11 +22,12 @@ class API < Grape::API
   namespace :api do
     resource :urls do
       post '/' do
-        url = Url.new(original_url: params[:url])
+        model_attributes = params[:model]
+        url = Url.new(model_attributes)
         if url.save
-          {url: url.key}
+          {url: url.key, strategy: url.strategy}
         else
-          error!({error: url.errors[:original_url].join(', ')}, 400)
+          error!({error: url.errors.to_hash}, 400)
         end
       end
 
